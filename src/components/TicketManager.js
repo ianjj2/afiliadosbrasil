@@ -110,11 +110,6 @@ const TicketManager = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('validar');
   const [showRoulette, setShowRoulette] = useState(false);
-  const [rouletteWinnerIndex, setRouletteWinnerIndex] = useState(null);
-  const [rouletteAnimating, setRouletteAnimating] = useState(false);
-  const [rouletteKey, setRouletteKey] = useState(0);
-  const [rouletteError, setRouletteError] = useState('');
-  const [rouletteTimeout, setRouletteTimeout] = useState(null);
   const [fsRef, isFullscreen, enterFullscreen, exitFullscreen] = useFullscreen();
   const [revealActive, setRevealActive] = useState(false);
   const [revealStep, setRevealStep] = useState(0);
@@ -297,32 +292,6 @@ const TicketManager = () => {
             <span className="text-8xl font-extrabold text-red-500 drop-shadow-lg animate-pulse">
               {countdown}
             </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence mode="wait">
-        {showRoulette && (
-          <motion.div
-            key={rouletteKey}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-black/90 z-50"
-          >
-            <div className="w-full max-w-2xl mx-auto overflow-hidden relative">
-              <div className="flex flex-row items-center gap-2 animate-spin-horizontal" style={{ animation: rouletteAnimating ? 'spin-horizontal 5s cubic-bezier(0.23, 1, 0.32, 1)' : 'none', transform: rouletteAnimating ? 'none' : `translateX(-${rouletteWinnerIndex * 120}px)` }}>
-                {validatedTickets.map((item, idx) => (
-                  <div key={idx} className={`flex flex-col items-center justify-center w-[110px] h-[110px] mx-2 rounded-xl border-4 ${idx === rouletteWinnerIndex && !rouletteAnimating ? 'border-yellow-400 bg-yellow-100/10 scale-110 shadow-2xl' : 'border-red-500 bg-red-900/80'} transition-all duration-300`}>
-                    <span className="text-lg font-bold text-white tracking-wider">{item.nome}</span>
-                    <span className="text-yellow-300 text-xl font-mono">{item.ticket}</span>
-                  </div>
-                ))}
-              </div>
-              {/* Luzes e efeitos */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-yellow-400/80 blur-2xl animate-pulse z-10" />
-            </div>
-            <span className="absolute bottom-10 left-1/2 -translate-x-1/2 text-3xl text-yellow-300 font-bold animate-bounce">Quem será o vencedor?</span>
           </motion.div>
         )}
       </AnimatePresence>
