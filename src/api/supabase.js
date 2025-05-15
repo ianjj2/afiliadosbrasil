@@ -8,7 +8,7 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 export const generateTicket = async (formData) => {
   const ticketNumber = Math.floor(100000 + Math.random() * 900000); // Gera número de 6 dígitos
   
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('tickets')
     .insert([
       {
@@ -27,7 +27,7 @@ export const generateTicket = async (formData) => {
 };
 
 export const validateTicket = async (ticketNumber) => {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('tickets')
     .update({ validado: true })
     .eq('ticket_number', ticketNumber)
@@ -38,7 +38,7 @@ export const validateTicket = async (ticketNumber) => {
 };
 
 export const getValidatedTickets = async () => {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('tickets')
     .select('*')
     .eq('validado', true);

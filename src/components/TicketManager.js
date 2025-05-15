@@ -107,11 +107,9 @@ const TicketManager = () => {
   const [winner, setWinner] = useState(null);
   const [error, setError] = useState('');
   const [countdown, setCountdown] = useState(null);
-  const [rollingTicket, setRollingTicket] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('validar');
   const [showRoulette, setShowRoulette] = useState(false);
-  const [rouletteItems, setRouletteItems] = useState([]);
   const [rouletteWinnerIndex, setRouletteWinnerIndex] = useState(null);
   const [rouletteAnimating, setRouletteAnimating] = useState(false);
   const [rouletteKey, setRouletteKey] = useState(0);
@@ -304,21 +302,27 @@ const TicketManager = () => {
       </AnimatePresence>
 
       <AnimatePresence mode="wait">
-        {rollingTicket && !winner && (
+        {showRoulette && (
           <motion.div
-            key={rollingTicket}
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1.1, opacity: 1 }}
-            exit={{ scale: 0.5, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 flex items-center justify-center z-40"
+            key={rouletteKey}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 flex items-center justify-center bg-black/90 z-50"
           >
-            <div className="bg-red-900/90 border-4 border-red-500 rounded-2xl px-16 py-10 shadow-2xl flex flex-col items-center">
-              <span className="text-5xl font-bold text-white tracking-widest animate-bounce">
-                {rollingTicket}
-              </span>
-              <span className="text-lg text-gray-300 mt-2">Girando...</span>
+            <div className="w-full max-w-2xl mx-auto overflow-hidden relative">
+              <div className="flex flex-row items-center gap-2 animate-spin-horizontal" style={{ animation: rouletteAnimating ? 'spin-horizontal 5s cubic-bezier(0.23, 1, 0.32, 1)' : 'none', transform: rouletteAnimating ? 'none' : `translateX(-${rouletteWinnerIndex * 120}px)` }}>
+                {validatedTickets.map((item, idx) => (
+                  <div key={idx} className={`flex flex-col items-center justify-center w-[110px] h-[110px] mx-2 rounded-xl border-4 ${idx === rouletteWinnerIndex && !rouletteAnimating ? 'border-yellow-400 bg-yellow-100/10 scale-110 shadow-2xl' : 'border-red-500 bg-red-900/80'} transition-all duration-300`}>
+                    <span className="text-lg font-bold text-white tracking-wider">{item.nome}</span>
+                    <span className="text-yellow-300 text-xl font-mono">{item.ticket}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Luzes e efeitos */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-yellow-400/80 blur-2xl animate-pulse z-10" />
             </div>
+            <span className="absolute bottom-10 left-1/2 -translate-x-1/2 text-3xl text-yellow-300 font-bold animate-bounce">Quem será o vencedor?</span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -387,33 +391,6 @@ const TicketManager = () => {
           Tela Cheia
         </button>
       )}
-
-      {/* Roleta animada */}
-      <AnimatePresence>
-        {showRoulette && (
-          <motion.div
-            key={rouletteKey}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 flex items-center justify-center bg-black/90 z-50"
-          >
-            <div className="w-full max-w-2xl mx-auto overflow-hidden relative">
-              <div className="flex flex-row items-center gap-2 animate-spin-horizontal" style={{ animation: rouletteAnimating ? 'spin-horizontal 5s cubic-bezier(0.23, 1, 0.32, 1)' : 'none', transform: rouletteAnimating ? 'none' : `translateX(-${rouletteWinnerIndex * 120}px)` }}>
-                {rouletteItems.map((item, idx) => (
-                  <div key={idx} className={`flex flex-col items-center justify-center w-[110px] h-[110px] mx-2 rounded-xl border-4 ${idx === rouletteWinnerIndex && !rouletteAnimating ? 'border-yellow-400 bg-yellow-100/10 scale-110 shadow-2xl' : 'border-red-500 bg-red-900/80'} transition-all duration-300`}>
-                    <span className="text-lg font-bold text-white tracking-wider">{item.nome}</span>
-                    <span className="text-yellow-300 text-xl font-mono">{item.ticket}</span>
-                  </div>
-                ))}
-              </div>
-              {/* Luzes e efeitos */}
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full bg-yellow-400/80 blur-2xl animate-pulse z-10" />
-            </div>
-            <span className="absolute bottom-10 left-1/2 -translate-x-1/2 text-3xl text-yellow-300 font-bold animate-bounce">Quem será o vencedor?</span>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

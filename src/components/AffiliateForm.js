@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { submitForm, findTicketByCpfEmailOrTelefone } from '../api/formApi';
 import { generateTicket } from '../api/supabase';
-import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, RocketLaunchIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, CircleStackIcon, TicketIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, TicketIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 const validarCPF = (cpf) => {
   cpf = cpf.replace(/[^\d]/g, '');
