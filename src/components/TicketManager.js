@@ -109,7 +109,6 @@ const TicketManager = () => {
   const [countdown, setCountdown] = useState(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [activeTab, setActiveTab] = useState('validar');
-  const [showRoulette, setShowRoulette] = useState(false);
   const [fsRef, isFullscreen, enterFullscreen, exitFullscreen] = useFullscreen();
   const [revealActive, setRevealActive] = useState(false);
   const [revealStep, setRevealStep] = useState(0);
@@ -151,7 +150,6 @@ const TicketManager = () => {
     setError('');
     setWinner(null);
     setShowConfetti(false);
-    setShowRoulette(false);
     setRevealActive(false);
     setRevealStep(0);
     setTimeout(() => enterFullscreen(), 200);
