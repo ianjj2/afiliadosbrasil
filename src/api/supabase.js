@@ -27,7 +27,7 @@ export const generateTicket = async (formData) => {
 };
 
 export const validateTicket = async (ticketNumber) => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('tickets')
     .update({ validado: true })
     .eq('ticket_number', ticketNumber)
@@ -38,7 +38,7 @@ export const validateTicket = async (ticketNumber) => {
 };
 
 export const getValidatedTickets = async () => {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('tickets')
     .select('*')
     .eq('validado', true);
