@@ -36,12 +36,11 @@ export const LandingPage = ({ onStartForm }) => {
   // Adiciona evento para mostrar botão ao final do vídeo
   useEffect(() => {
     if (!videoRef.current) return;
+    const video = videoRef.current;
     const handleEnded = () => setShowCtaBtn(true);
-    videoRef.current.addEventListener('ended', handleEnded);
+    video.addEventListener('ended', handleEnded);
     return () => {
-      if (videoRef.current) {
-        videoRef.current.removeEventListener('ended', handleEnded);
-      }
+      video.removeEventListener('ended', handleEnded);
     };
   }, [videoRef]);
 
