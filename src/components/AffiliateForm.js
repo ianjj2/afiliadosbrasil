@@ -5,7 +5,7 @@ import { generateTicket } from '../api/supabase';
 import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, TicketIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 const validarCPF = (cpf) => {
-  cpf = cpf.replace(/[^\d]/g, '');
+  cpf = cpf.replace(/[^0-9]/g, '');
 
   if (cpf.length !== 11) return false;
 
@@ -102,8 +102,16 @@ const AffiliateForm = () => {
         return;
       }
 
+      // Envia o formulário
       await submitForm(formData, ipAddress);
       const ticket = await generateTicket(formData);
+      
+      // Rastrear evento de cadastro no Facebook Pixel APENAS se o formulário foi enviado com sucesso
+      if (window.fbq) {
+        window.fbq('track', 'Cadastro-Feito-Rangel');
+        console.log('Evento de cadastro disparado para o Facebook Pixel');
+      }
+
       setTicketNumber(ticket);
       setCurrentStep(currentStep + 1);
     } catch (error) {
