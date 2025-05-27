@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 // Declaração global do fbq para o ESLint
 /* global fbq */
