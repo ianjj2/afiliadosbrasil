@@ -8,6 +8,17 @@ import Dashboard from './pages/Dashboard';
 import HomePage from './pages/HomePage';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
+import FacebookPixel from './components/FacebookPixel';
+
+// Função para rastrear eventos do Facebook Pixel
+export const trackFacebookEvent = (eventName) => {
+  if (window.fbq) {
+    window.fbq('track', eventName);
+    console.log(`Evento do Facebook Pixel disparado: ${eventName}`);
+  } else {
+    console.warn('Facebook Pixel não está carregado');
+  }
+};
 
 export const LandingPage = ({ onStartForm }) => {
   const videoRef = useRef(null);
@@ -326,6 +337,7 @@ export const LandingPage = ({ onStartForm }) => {
 function App() {
   return (
     <AuthProvider>
+      <FacebookPixel />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
