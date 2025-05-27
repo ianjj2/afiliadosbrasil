@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { submitForm, findTicketByCpfEmailOrTelefone } from '../api/formApi';
 import { generateTicket } from '../api/supabase';
 import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, TicketIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { trackGoogleConversion } from './GoogleAnalytics';
 
 const validarCPF = (cpf) => {
   cpf = cpf.replace(/[^0-9]/g, '');
@@ -106,11 +107,14 @@ const AffiliateForm = () => {
       await submitForm(formData, ipAddress);
       const ticket = await generateTicket(formData);
       
-      // Rastrear evento de cadastro no Facebook Pixel APENAS se o formulário foi enviado com sucesso
+      // Rastrear evento de cadastro no Facebook Pixel
       if (window.fbq) {
         window.fbq('track', 'Cadastro-Feito-Rangel');
         console.log('Evento de cadastro disparado para o Facebook Pixel');
       }
+
+      // Rastrear evento de conversão no Google Analytics
+      trackGoogleConversion();
 
       setTicketNumber(ticket);
       setCurrentStep(currentStep + 1);
