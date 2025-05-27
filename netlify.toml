@@ -2,6 +2,9 @@
   command = "npm run build"
   publish = "build"
 
+[build.environment]
+  REACT_APP_FACEBOOK_PIXEL_ID = "1002539111981798"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
