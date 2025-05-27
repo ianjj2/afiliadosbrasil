@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './contexts/AuthContext';
 import FacebookPixel from './components/FacebookPixel';
+import GoogleAnalytics from './components/GoogleAnalytics';
 
 // Função para rastrear eventos do Facebook Pixel
 export const trackFacebookEvent = (eventName) => {
@@ -338,6 +339,7 @@ function App() {
   return (
     <AuthProvider>
       <FacebookPixel />
+      <GoogleAnalytics />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
