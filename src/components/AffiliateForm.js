@@ -576,7 +576,7 @@ const AffiliateForm = () => {
                     Vá até o estande da Bravo Bet para validar seu ticket e participar do sorteio!
                   </p>
                   <a
-                    href={`https://wa.me/31992626215?text=${encodeURIComponent(`Olá! Tenho interesse em ser um afiliado Bravo.Bet! Meu ticket é: ${ticketNumber}`)}`}
+                    href={`https://wa.me/31992626215?text=${encodeURIComponent(`Olá! Tenho interesse em ser um afiliado Bravo.Bet!`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block mt-6 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all"
