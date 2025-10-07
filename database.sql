@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS submissions (
     experiencia_igaming VARCHAR(30) NOT NULL,
     faturamento_mensal VARCHAR(30) NOT NULL,
     fonte_trafego VARCHAR(100) NOT NULL,
-    cpf VARCHAR(14) NOT NULL,
+    cpf VARCHAR(14),
     email VARCHAR(100) NOT NULL,
     ip_address VARCHAR(45),
     submitted_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -41,7 +41,7 @@ COMMENT ON COLUMN submissions.telefone IS 'Número de telefone/WhatsApp do afili
 COMMENT ON COLUMN submissions.experiencia_igaming IS 'Experiência com iGaming: SIM, NÃO ou NÃO SEI O QUE É';
 COMMENT ON COLUMN submissions.faturamento_mensal IS 'Faixa de faturamento mensal no mercado de iGaming';
 COMMENT ON COLUMN submissions.fonte_trafego IS 'Principal fonte de tráfego utilizada pelo afiliado';
-COMMENT ON COLUMN submissions.cpf IS 'CPF do afiliado (sem formatação)';
+COMMENT ON COLUMN submissions.cpf IS 'CPF do afiliado (sem formatação) - OPCIONAL';
 COMMENT ON COLUMN submissions.email IS 'Email de contato do afiliado';
 COMMENT ON COLUMN submissions.ip_address IS 'Endereço IP de onde foi feita a submissão';
 COMMENT ON COLUMN submissions.submitted_at IS 'Data e hora da submissão do formulário';
@@ -278,13 +278,13 @@ ALTER TABLE submissions
 ADD CONSTRAINT chk_email_format 
 CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');
 
--- Constraint: Validar CPF (apenas números, 11 dígitos)
+-- Constraint: Validar CPF (apenas números, 11 dígitos) quando informado
 ALTER TABLE submissions 
 DROP CONSTRAINT IF EXISTS chk_cpf_format;
 
 ALTER TABLE submissions 
 ADD CONSTRAINT chk_cpf_format 
-CHECK (cpf ~ '^[0-9]{11}$');
+CHECK (cpf IS NULL OR cpf ~ '^[0-9]{11}$');
 
 -- Constraint: Validar experiência (valores permitidos)
 ALTER TABLE submissions 

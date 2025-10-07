@@ -41,7 +41,6 @@ const AffiliateForm = () => {
     fonte_trafego: '',
     nome: '',
     telefone: '',
-    cpf: '',
     email: '',
   });
   const [ipAddress, setIpAddress] = useState('');
@@ -55,9 +54,8 @@ const AffiliateForm = () => {
     CurrencyDollarIcon, // 2 - Faturamento
     GlobeAltIcon, // 3 - Fonte de tráfego
     UserGroupIcon, // 4 - Nome
-    DocumentTextIcon, // 5 - CPF
-    EnvelopeIcon, // 6 - Email
-    ChatBubbleBottomCenterTextIcon, // 7 - Telefone
+    EnvelopeIcon, // 5 - Email
+    ChatBubbleBottomCenterTextIcon, // 6 - Telefone
   ];
 
   useEffect(() => {
@@ -111,7 +109,7 @@ const AffiliateForm = () => {
     }
   };
 
-  const progressWidth = (currentStep / 7) * 100;
+  const progressWidth = (currentStep / 6) * 100;
 
   const renderQuestion = () => {
     return (
@@ -125,7 +123,7 @@ const AffiliateForm = () => {
           className="w-full relative"
         >
           {/* Botão de voltar */}
-          {currentStep > 1 && currentStep < 8 && !submitSuccess && (
+          {currentStep > 1 && currentStep < 7 && !submitSuccess && (
             <div className="mb-4">
               <button
                 onClick={() => setCurrentStep(currentStep - 1)}
@@ -185,7 +183,7 @@ const AffiliateForm = () => {
                             nome: 'Usuário Interessado',
                             telefone: 'Não informado'
                           }));
-                          setCurrentStep(6);
+                          setCurrentStep(5);
                         } else {
                           setCurrentStep(currentStep + 1);
                         }
@@ -346,67 +344,6 @@ const AffiliateForm = () => {
               <div className="space-y-6">
                 <div className="flex items-start mb-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mr-4">
-                    <DocumentTextIcon className="w-6 h-6 text-red-500" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white mb-2 tech-font">
-                      CPF*
-                    </h2>
-                    <p className="text-gray-400 text-sm">
-                      Digite seu CPF (apenas números)
-                    </p>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={formData.cpf}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, '');
-                      handleChange(value, 'cpf');
-                      if (value.length === 11 && !validarCPF(value)) {
-                        setError('CPF inválido. Por favor, verifique os números.');
-                      } else {
-                        setError('');
-                      }
-                    }}
-                    placeholder="Digite seu CPF"
-                    maxLength={11}
-                    className="w-full p-4 rounded-lg border bg-red-900/20 border-red-800 text-white focus:border-red-500 focus:outline-none backdrop-blur-sm placeholder-gray-500"
-                  />
-                  <div className="absolute bottom-0 left-0 w-full h-[2px] bg-red-800 overflow-hidden">
-                    <div 
-                      className="h-full bg-red-500 transition-all duration-300"
-                      style={{ width: formData.cpf ? '100%' : '0%' }}
-                    />
-                  </div>
-                </div>
-
-                {error && (
-                  <p className="text-red-500 text-sm">{error}</p>
-                )}
-
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setCurrentStep(currentStep + 1)}
-                  disabled={!formData.cpf || formData.cpf.length !== 11 || !validarCPF(formData.cpf)}
-                  className={`w-full p-4 rounded-lg ${
-                    formData.cpf && formData.cpf.length === 11 && validarCPF(formData.cpf)
-                      ? 'bg-red-600 hover:bg-red-700'
-                      : 'bg-red-800/50 cursor-not-allowed'
-                  } text-white font-medium transition-all backdrop-blur-sm`}
-                >
-                  Próximo
-                </motion.button>
-              </div>
-            )}
-
-            {currentStep === 6 && (
-              <div className="space-y-6">
-                <div className="flex items-start mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mr-4">
                     <EnvelopeIcon className="w-6 h-6 text-red-500" />
                   </div>
                   <div>
@@ -451,7 +388,7 @@ const AffiliateForm = () => {
               </div>
             )}
 
-            {currentStep === 7 && (
+            {currentStep === 6 && (
               <div className="space-y-6">
                 <div className="flex items-start mb-4">
                   <div className="flex-shrink-0 w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mr-4">
@@ -513,7 +450,7 @@ const AffiliateForm = () => {
               </div>
             )}
 
-            {currentStep === 8 && submitSuccess && (
+            {currentStep === 7 && submitSuccess && (
               <div className="space-y-6">
                 <motion.div
                   initial={{ scale: 0.5, opacity: 0 }}

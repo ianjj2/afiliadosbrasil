@@ -11,9 +11,8 @@ export const submitForm = async (formData, ipAddress) => {
           experiencia_igaming: formData.experiencia_igaming,
           faturamento_mensal: formData.faturamento_mensal,
           fonte_trafego: formData.fonte_trafego,
-          cpf: formData.cpf,
           email: formData.email,
-          ip_address: ipAddress,
+          ip_address: ipAddress || 'Não disponível',
           submitted_at: new Date().toISOString(),
         }
       ])
