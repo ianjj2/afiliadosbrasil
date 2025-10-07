@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { getSubmissions, updateContactStatus, deleteLead } from '../api/formApi';
 import { supabase } from '../lib/supabase';
 import { getIpLocation } from '../services/ipService';
-import TicketManager from '../components/TicketManager';
 
 const WhatsAppIcon = () => (
   <svg className="w-5 h-5 text-red-500 hover:text-red-600" fill="currentColor" viewBox="0 0 24 24">
@@ -110,7 +109,6 @@ const Dashboard = () => {
   const [isViewsModalOpen, setIsViewsModalOpen] = useState(false);
   const [viewsData, setViewsData] = useState([]);
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(null);
-  const [aba, setAba] = useState('leads'); // 'leads' ou 'tickets'
 
   const fetchSubmissions = useCallback(async () => {
     try {
@@ -373,22 +371,6 @@ const Dashboard = () => {
 
         {/* Main Content */}
         <main className="p-2 sm:p-4">
-          <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 mb-4">
-            <button
-              className={`w-full sm:w-auto px-4 py-2 rounded ${aba === 'leads' ? 'bg-red-600 text-white' : 'bg-red-900 text-gray-300'}`}
-              onClick={() => setAba('leads')}
-            >
-              Leads
-            </button>
-            <button
-              className={`w-full sm:w-auto px-4 py-2 rounded ${aba === 'tickets' ? 'bg-red-600 text-white' : 'bg-red-900 text-gray-300'}`}
-              onClick={() => setAba('tickets')}
-            >
-              Tickets
-            </button>
-          </div>
-          {aba === 'leads' && (
-            <>
           {/* Filters */}
           <div className="mb-8 grid grid-cols-1 md:grid-cols-3 gap-2 sm:gap-4">
             <input
@@ -630,11 +612,6 @@ const Dashboard = () => {
             onClose={() => setIsViewsModalOpen(false)}
             views={viewsData}
           />
-            </>
-          )}
-          {aba === 'tickets' && (
-            <TicketManager />
-          )}
         </main>
       </div>
     </div>

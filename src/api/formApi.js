@@ -97,24 +97,3 @@ export const login = async (credentials) => {
     throw error;
   }
 };
-
-export const findTicketByCpfEmailOrTelefone = async ({ cpf, email, telefone }) => {
-  try {
-    const filters = [];
-    if (cpf) filters.push(`cpf.eq.${cpf}`);
-    if (email) filters.push(`email.eq.${email}`);
-    if (telefone) filters.push(`telefone.eq.${telefone}`);
-    if (filters.length === 0) return null;
-
-    const { data, error } = await supabase
-      .from('tickets')
-      .select('*')
-      .or(filters.join(','))
-      .limit(1);
-    if (error) throw error;
-    return data && data.length > 0 ? data[0] : null;
-  } catch (error) {
-    console.error('Erro ao buscar ticket:', error);
-    throw error;
-  }
-}; 

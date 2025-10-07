@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { submitForm, findTicketByCpfEmailOrTelefone } from '../api/formApi';
-import { generateTicket } from '../api/supabase';
-import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, TicketIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { submitForm } from '../api/formApi';
+import { ChartBarIcon, CurrencyDollarIcon, UserGroupIcon, GlobeAltIcon, ChatBubbleBottomCenterTextIcon, BoltIcon, DocumentTextIcon, EnvelopeIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { trackGoogleConversion } from './GoogleAnalytics';
 
 const validarCPF = (cpf) => {
@@ -49,8 +48,7 @@ const AffiliateForm = () => {
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [ticketNumber, setTicketNumber] = useState(null);
-  const [ticketInfo, setTicketInfo] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const stepIcons = [
     ChartBarIcon, // 1 - Experiência
@@ -88,24 +86,11 @@ const AffiliateForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setError('');
-    setTicketInfo(null);
+    setSubmitSuccess(false);
 
     try {
-      // Verifica se já existe ticket para o CPF, email ou telefone
-      const existingTicket = await findTicketByCpfEmailOrTelefone({
-        cpf: formData.cpf,
-        email: formData.email,
-        telefone: formData.telefone
-      });
-      if (existingTicket) {
-        setTicketInfo(existingTicket);
-        setIsSubmitting(false);
-        return;
-      }
-
       // Envia o formulário
       await submitForm(formData, ipAddress);
-      const ticket = await generateTicket(formData);
       
       // Rastrear evento de cadastro no Facebook Pixel
       if (window.fbq) {
@@ -116,7 +101,7 @@ const AffiliateForm = () => {
       // Rastrear evento de conversão no Google Analytics
       trackGoogleConversion();
 
-      setTicketNumber(ticket);
+      setSubmitSuccess(true);
       setCurrentStep(currentStep + 1);
     } catch (error) {
       console.error('Erro ao enviar formulário:', error);
@@ -129,25 +114,6 @@ const AffiliateForm = () => {
   const progressWidth = (currentStep / 7) * 100;
 
   const renderQuestion = () => {
-    if (ticketInfo) {
-      return (
-        <div className="bg-red-900/30 border border-red-500 rounded-lg p-8 text-center space-y-4">
-          <h2 className="text-2xl font-bold text-white mb-2">Você já possui um ticket!</h2>
-          <p className="text-white text-lg">Número do ticket: <span className="font-bold text-yellow-400">{ticketInfo.ticket_number}</span></p>
-          {ticketInfo.validado ? (
-            <>
-              <p className="text-green-400 text-lg font-semibold">Seu ticket já está validado. Boa sorte!</p>
-            </>
-          ) : (
-            <>
-              <p className="text-yellow-400 text-lg font-semibold">Seu ticket ainda não foi validado.</p>
-              <p className="text-white">Vá até o estande da Bravo Bet para validar seu ticket e participar do sorteio!</p>
-            </>
-          )}
-        </div>
-      );
-    }
-
     return (
       <AnimatePresence mode="wait">
         <motion.div
@@ -159,7 +125,7 @@ const AffiliateForm = () => {
           className="w-full relative"
         >
           {/* Botão de voltar */}
-          {currentStep > 1 && currentStep < 8 && (
+          {currentStep > 1 && currentStep < 8 && !submitSuccess && (
             <div className="mb-4">
               <button
                 onClick={() => setCurrentStep(currentStep - 1)}
@@ -547,41 +513,37 @@ const AffiliateForm = () => {
               </div>
             )}
 
-            {currentStep === 8 && ticketNumber && (
+            {currentStep === 8 && submitSuccess && (
               <div className="space-y-6">
-                <div className="flex items-start mb-4">
-                  <div className="flex-shrink-0 w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center mr-4">
-                    <TicketIcon className="w-6 h-6 text-red-500" />
-                  </div>
-                  <div>
-                    <h2 className="text-2xl font-bold text-white mb-2 tech-font">
-                      Seu Ticket foi Gerado!
-                    </h2>
-                    <p className="text-gray-400 text-sm">
-                      Guarde este número para validação no estande da Bravo Bet
-                    </p>
-                  </div>
-                </div>
-
                 <motion.div
                   initial={{ scale: 0.5, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.5 }}
                   className="bg-red-900/20 border-2 border-red-500 rounded-lg p-6 text-center"
                 >
-                  <h3 className="text-4xl font-bold text-white mb-4 tech-font">
-                    {ticketNumber}
-                  </h3>
-                  <p className="text-gray-400">
-                    Vá até o estande da Bravo Bet para validar seu ticket e participar do sorteio!
+                  <div className="flex justify-center mb-6">
+                    <div className="w-20 h-20 bg-green-600 rounded-full flex items-center justify-center">
+                      <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  
+                  <h2 className="text-3xl font-bold text-white mb-4 tech-font">
+                    Cadastro realizado com sucesso!
+                  </h2>
+                  
+                  <p className="text-gray-300 text-lg mb-6">
+                    Obrigado por se cadastrar! Nossa equipe entrará em contato em breve.
                   </p>
+                  
                   <a
                     href={`https://wa.me/31992626215?text=${encodeURIComponent(`Olá! Tenho interesse em ser um afiliado Bravo.Bet!`)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block mt-6 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all"
+                    className="inline-block mt-4 bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg transition-all"
                   >
-                    Quero chamar no WhatsApp
+                    Falar no WhatsApp agora
                   </a>
                 </motion.div>
               </div>
