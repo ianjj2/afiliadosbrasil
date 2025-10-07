@@ -512,7 +512,7 @@ const AffiliateForm = () => {
             alt="BRAVO.BET" 
             className="h-20 mx-auto"
           />
-          <p className="text-gray-400 mt-2">Afiliados Brasil</p>
+          <p className="text-gray-400 mt-2">Conversão Digital</p>
         </div>
 
         <div className="w-full max-w-md">
